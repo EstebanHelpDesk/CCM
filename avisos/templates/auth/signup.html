@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-person-add"></i> Registro</h2>
+
+<form method="post" class="card shadow-sm p-3">
+  {% csrf_token %}
+
+  {# errores generales del form (no_field_errors) #}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %}
+
+  {# campos #}
+  {% for field in form %}
+    <div class="mb-3">
+      <label for="{{ field.id_for_label }}" class="form-label small fw-semibold">
+        {{ field.label }}
+      </label>
+      {{ field }}
+      {% if field.help_text %}
+        <div class="form-text">{{ field.help_text|safe }}</div>
+      {% endif %}
+      {% for error in field.errors %}
+        <div class="invalid-feedback d-block">{{ error }}</div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">
+      <i class="bi bi-check2"></i> Crear cuenta
+    </button>
+    <a class="btn btn-link" href="{% url 'login' %}">
+      ¿Ya tenés cuenta? Iniciar sesión
+    </a>
+  </div>
+</form>
+{% endblock %}

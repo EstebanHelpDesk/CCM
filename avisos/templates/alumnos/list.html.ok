@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-people"></i> Mis alumnos</h2>
+<p><a class="btn btn-primary btn-sm" href="{% url 'student_create' %}"><i class="bi bi-person-plus"></i> Agregar alumno</a></p>
+<table class="table table-hover table-striped align-middle">
+  <thead><tr><th>Apellido</th><th>Nombre</th><th>Nivel</th><th>Grado</th><th>Activo</th><th>Acciones</th></tr></thead>
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.last_name }}</td>
+      <td>{{ s.first_name }}</td>
+      <td>{{ s.level }}</td>
+      <td>{{ s.grade }}</td>
+      <td>{{ s.active|yesno:"Sí,No" }}</td>
+      <td>
+        <a href="{% url 'student_update' s.pk %}"><i class="bi bi-pencil"></i> Editar</a> 
+        <a href="{% url 'student_delete' s.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Eliminar</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No tienes alumnos cargados.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

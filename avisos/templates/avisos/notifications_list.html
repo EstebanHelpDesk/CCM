@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-bell"></i> Mis avisos</h2>
+
+{# ===== MOBILE (cards) ===== #}
+<div class="d-md-none">
+  {% for n in notifications %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="pe-2">
+            <div class="fw-semibold">{{ n.student }}</div>
+            <div class="small text-muted">{{ n.reported_at|date:"d/m/Y H:i" }}</div>
+          </div>
+          <a href="{% url 'notification_delete' n.pk %}"
+             class="btn btn-sm btn-outline-danger"
+             aria-label="Eliminar aviso">
+            <i class="bi bi-trash"></i>
+          </a>
+        </div>
+
+        <div class="mt-2">{{ n.reason }}</div>
+
+        {% if n.reviewed_by %}
+          <div class="mt-2 small text-muted">
+            Visto por {{ n.reviewed_by.full_name }} — {{ n.reviewed_at|date:"d/m H:i" }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-light border">No hay avisos</div>
+  {% endfor %}
+</div>
+
+{# ===== DESKTOP (tabla) ===== #}
+<div class="table-responsive d-none d-md-block">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Fecha</th>
+        <th>Alumno</th>
+        <th>Motivo</th>
+        <th class="text-end"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in notifications %}
+      <tr>
+        <td class="text-nowrap">{{ n.reported_at|date:"d/m/Y H:i" }}</td>
+        <td>
+          {{ n.student }}
+          {% if n.reviewed_by %}
+            <div class="small text-muted">Visto por {{ n.reviewed_by.full_name }} — {{ n.reviewed_at|date:"d/m H:i" }}</div>
+          {% endif %}
+        </td>
+        <td class="text-truncate" style="max-width: 480px">{{ n.reason }}</td>
+        <td class="text-end">
+          <a href="{% url 'notification_delete' n.pk %}"
+             class="btn btn-sm btn-outline-danger">
+            <i class="bi bi-trash"></i> <span class="d-none d-lg-inline">Eliminar</span>
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">
+          <div class="alert alert-light border mb-0">No hay avisos</div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

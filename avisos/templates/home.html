@@ -1,0 +1,46 @@
+{% extends 'base.html' %}{% block content %}
+<div class="row g-4">
+  <div class="col-12 col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Acciones</h5>
+        <div class="d-grid gap-2">
+ {% if has_active_students %}
+  <a class="btn btn-primary" href="{% url 'notify_late' %}">
+    <i class="bi bi-alarm"></i> Avisar que llego tarde
+  </a>
+{% else %}
+  <button class="btn btn-primary" type="button" disabled title="Cargá al menos un alumno para avisar">
+    <i class="bi bi-alarm"></i> Avisar que llego tarde
+  </button>
+{% endif %}
+          <a class="btn btn-outline-primary" href="{% url 'students_list' %}"><i class="bi bi-people"></i> Mis alumnos</a>
+          <a class="btn btn-outline-secondary" href="{% url 'profile' %}"><i class="bi bi-person"></i> Mi perfil</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Últimas llegadas tarde</h5>
+        {% if latest_lates %}
+          <ul class="list-group list-group-flush">
+            {% for late in latest_lates %}
+              <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div>
+                  <div class="fw-semibold">{{ late.student }}</div>
+                  <small class="text-muted">{{ late.reason }}</small>
+                </div>
+                <span class="badge text-bg-secondary">{{ late.reported_at|date:"d/m H:i" }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">No hay avisos recientes.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

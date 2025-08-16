@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-bar-chart-line"></i> Llegadas tarde — Totalizado</h2>
+
+<form method="get" class="card shadow-sm p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-12 col-md-6">
+      <label class="form-label small fw-semibold">Buscar alumno</label>
+      {{ form.q }}
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-end">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Filtrar</button>
+    </div>
+  </div>
+</form>
+
+{# MOBILE: cards #}
+<div class="d-md-none">
+  {% for r in rows %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="pe-2">
+            <a class="fw-semibold text-decoration-none"
+               href="{% url 'student_late_history' r.student_id %}">
+              {{ r.student__last_name }}, {{ r.student__first_name }}
+            </a>
+            <div class="small text-muted">{{ r.student__level }} {{ r.student__grade }}</div>
+          </div>
+          <div class="text-end">
+            {% if r.last30 > 10 %}
+              <span class="badge text-bg-danger">{{ r.last30 }}</span>
+            {% elif r.last30 > 5 %}
+              <span class="badge text-bg-warning text-dark">{{ r.last30 }}</span>
+            {% else %}
+              <span class="badge text-bg-success">{{ r.last30 }}</span>
+            {% endif %}
+            <span class="badge text-bg-primary">Tot: {{ r.total }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-light border">Sin resultados.</div>
+  {% endfor %}
+</div>
+
+{# DESKTOP: tabla #}
+<div class="table-responsive d-none d-md-block">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Alumno</th>
+        <th>Grado</th>
+        <th class="text-nowrap">Últimos 30</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td class="text-nowrap">
+          <a href="{% url 'student_late_history' r.student_id %}">
+            {{ r.student__last_name }}, {{ r.student__first_name }}
+          </a>
+        </td>
+        <td class="text-nowrap">{{ r.student__level }} {{ r.student__grade }}</td>
+        <td>
+          {% if r.last30 > 10 %}
+            <span class="badge text-bg-danger">{{ r.last30 }}</span>
+          {% elif r.last30 > 5 %}
+            <span class="badge text-bg-warning text-dark">{{ r.last30 }}</span>
+          {% else %}
+            <span class="badge text-bg-success">{{ r.last30 }}</span>
+          {% endif %}
+        </td>
+        <td><span class="badge text-bg-primary">{{ r.total }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4"><div class="alert alert-light border mb-0">Sin resultados.</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-people-fill"></i> Quién llega tarde hoy</h2>
+
+{# MOBILE: cards #}
+<div class="d-md-none">
+  {% for n in lates %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="pe-2">
+            <a class="fw-semibold text-decoration-none" href="{% url 'student_late_history' n.student_id %}">
+              {{ n.student.last_name }}, {{ n.student.first_name }}
+            </a>
+            <div class="small text-muted">{{ n.student.level }} {{ n.student.grade }}</div>
+            <div class="mt-1">
+              {% with c30=counts_30.n.student_id ctot=counts_total.n.student_id %}
+              {% endwith %}
+              {% with c30=counts_30.n.student_id %}{% endwith %}
+            </div>
+          </div>
+          <span class="badge text-bg-secondary">{{ n.reported_at|date:"H:i" }}</span>
+        </div>
+        <div class="mt-2 small">{{ n.reason }}</div>
+       <div class="mt-2 d-flex gap-2">
+  {% if n.last30_count > 10 %}
+    <span class="badge text-bg-danger">30 días: {{ n.last30_count }}</span>
+  {% elif n.last30_count > 5 %}
+    <span class="badge text-bg-warning text-dark">30 días: {{ n.last30_count }}</span>
+  {% else %}
+    <span class="badge text-bg-success">30 días: {{ n.last30_count }}</span>
+  {% endif %}
+  <span class="badge text-bg-primary">Total: {{ n.total_count }}</span>
+</div>
+
+        {% if n.reviewed_by %}
+          <div class="mt-2 small text-muted">Visto por {{ n.reviewed_by.full_name }} a las {{ n.reviewed_at|date:"H:i" }}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-light border">No hay avisos hoy.</div>
+  {% endfor %}
+</div>
+
+{# DESKTOP: tabla #}
+<div class="table-responsive d-none d-md-block">
+  <table class="table table-hover table-striped align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Alumno</th>
+        <th>Nivel/Grado</th>
+        <th>Hora</th>
+        <th>Motivo</th>
+        <th class="text-nowrap">30 días</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in lates %}
+      {% with sid=n.student_id c30=counts_30.sid|default:0 ctot=counts_total.sid|default:0 %}
+      <tr>
+        <td class="text-truncate">
+          <a href="{% url 'student_late_history' n.student_id %}">{{ n.student.last_name }}, {{ n.student.first_name }}</a>
+          {% if n.reviewed_by %}
+            <div class="small text-muted">Visto por {{ n.reviewed_by.full_name }} {{ n.reviewed_at|date:"H:i" }}</div>
+          {% endif %}
+        </td>
+        <td>{{ n.student.level }} {{ n.student.grade }}</td>
+        <td>{{ n.reported_at|date:"H:i" }}</td>
+        <td class="text-truncate" style="max-width: 400px">{{ n.reason }}</td>
+        <td>
+          {% if n.last30_count > 10 %}
+    <span class="badge text-bg-danger">30 días: {{ n.last30_count }}</span>
+  {% elif n.last30_count > 5 %}
+    <span class="badge text-bg-warning text-dark">30 días: {{ n.last30_count }}</span>
+  {% else %}
+    <span class="badge text-bg-success">30 días: {{ n.last30_count }}</span>
+  {% endif %}
+  
+        </td>
+        <td><span class="badge text-bg-primary">Total: {{ n.total_count }}</span></td>
+      </tr>
+      {% endwith %}
+      {% empty %}
+      <tr><td colspan="6"><div class="alert alert-light border mb-0">No hay avisos hoy.</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

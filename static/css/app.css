@@ -1,0 +1,37 @@
+
+:root {
+  --bs-primary: #e0e0e0;
+  --bs-secondary: #f0f0f0;
+  --bs-info: #c0c0c0;
+}
+body {
+  background: #f7f9fc;
+}
+header .navbar-brand img { height: 36px; width:auto; }
+main .container { padding-top: 1rem; padding-bottom: 2rem; }
+.table td, .table th { vertical-align: middle; }
+.messages { list-style: none; padding-left: 0; }
+/* Map Django message tags to Bootstrap alerts */
+li.success { @apply alert alert-success; }
+li.info { @apply alert alert-info; }
+li.warning { @apply alert alert-warning; }
+li.error { @apply alert alert-danger; }
+/* Fallback when @apply isn't available */
+li.success, .alert-success { background: #d1e7dd; }
+li.info, .alert-info { background: #cff4fc; }
+li.warning, .alert-warning { background: #fff3cd; }
+li.error, .alert-danger { background: #f8d7da; }
+
+body.bg-image {
+  background: url('../fondo_ccm.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Opcional: agregar overlay para suavizar */
+body.bg-image::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.4); /* cambia opacidad a gusto */
+  z-index: -1;
+}

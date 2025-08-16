@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-person-gear"></i> Asignar personal de escuela</h2>
+<form method="post" class="card shadow-sm p-3">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label small fw-semibold" for="{{ form.id_number.id_for_label }}">Documento</label>
+    {{ form.id_number }}
+  </div>
+  <div class="form-check mb-3">
+    {{ form.is_school_staff }} <label class="form-check-label" for="{{ form.is_school_staff.id_for_label }}">Es personal de escuela</label>
+  </div>
+  <button class="btn btn-primary" type="submit"><i class="bi bi-check2"></i> Guardar</button>
+</form>
+{% endblock %}

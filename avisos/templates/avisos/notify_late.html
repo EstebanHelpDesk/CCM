@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<h2>Avisar llegada tarde</h2>
+<form method="post" class="card shadow-sm p-3">{% csrf_token %}{{ form.as_p }}<button class="btn btn-primary" type="submit"><i class="bi bi-send"></i> Enviar</button></form>
+{% endblock %}

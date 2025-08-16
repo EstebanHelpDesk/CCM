@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block content %}
+<h2 class="mb-3"><i class="bi bi-upload"></i> Carga masiva de alumnos</h2><p>Para cargar <strong>uno por uno</strong> usá <a href="{% url 'students_list' %}">Mis alumnos</a>.</p>
+<form method="post" class="card shadow-sm p-3">{% csrf_token %}{{ form.as_p }}<button type="submit">Guardar</button></form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3"><i class="bi bi-clipboard-data"></i> Llegadas tarde — Detalle</h2>
+
+<form method="get" class="card shadow-sm p-3 mb-3">
+  <div class="row g-2">
+    <div class="col-12 col-md-3">
+      <label class="form-label small fw-semibold">Desde</label>
+      {{ form.date_from }}
+    </div>
+    <div class="col-12 col-md-3">
+      <label class="form-label small fw-semibold">Hasta</label>
+      {{ form.date_to }}
+    </div>
+    <div class="col-12 col-md-6 d-flex align-items-end gap-2">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Buscar</button>
+      {% if form.is_valid %}
+        <a class="btn btn-outline-success"
+           href="?date_from={{ form.date_from.value }}&date_to={{ form.date_to.value }}&export=1">
+          <i class="bi bi-file-earmark-excel"></i> Descargar Excel
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</form>
+
+{# MOBILE: cards #}
+<div class="d-md-none">
+  {% for n in rows %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div class="fw-semibold">
+            {{ n.student.last_name }}, {{ n.student.first_name }}
+          </div>
+          <span class="badge text-bg-secondary">{{ n.reported_at|date:"d/m H:i" }}</span>
+        </div>
+        <div class="small text-muted">{{ n.student.level }} {{ n.student.grade }}</div>
+        <div class="mt-2">{{ n.reason }}</div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-light border">Sin datos para el rango.</div>
+  {% endfor %}
+</div>
+
+{# DESKTOP: tabla #}
+<div class="table-responsive d-none d-md-block">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Alumno</th>
+        <th>Grado</th>
+        <th>Fecha y hora</th>
+        <th>Motivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in rows %}
+      <tr>
+        <td class="text-nowrap">{{ n.student.last_name }}, {{ n.student.first_name }}</td>
+        <td class="text-nowrap">{{ n.student.level }} {{ n.student.grade }}</td>
+        <td class="text-nowrap">{{ n.reported_at|date:"d/m/Y H:i" }}</td>
+        <td class="text-truncate" style="max-width: 560px">{{ n.reason }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4"><div class="alert alert-light border mb-0">Sin datos para el rango.</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

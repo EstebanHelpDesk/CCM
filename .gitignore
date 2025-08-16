@@ -1,0 +1,62 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# --- Entornos virtuales ---
+.venv/
+venv/
+env/
+ambiente/
+
+# --- Configuración / credenciales ---
+.env
+*.env
+
+# --- Base de datos local ---
+db.sqlite3
+db.sqlite3-journal
+
+# --- Archivos compilados/caches ---
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+develop-eggs/
+.installed.cfg
+*.manifest
+*.spec
+
+# --- Django ---
+media/
+static_root/
+staticfiles/
+*.mo
+
+# --- IDEs y editores ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Testing ---
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+htmlcov/
+pytest_cache/
+
+# --- Otros ---
+*.bak
+*.swp
+*.tmp
