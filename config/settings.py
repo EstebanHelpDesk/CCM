@@ -52,6 +52,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+#si env("DATABASE_NAME") no existe usar una en la ruta local
+if not env("DATABASE_NAME", default=None):
+    env("DATABASE_NAME", default=BASE_DIR / "db.sqlite3")
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
