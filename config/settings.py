@@ -53,7 +53,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {"default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/home/sistemaccm/CCM/db.sqlite3',  # Nota: solo una barra /
+        'OPTIONS': {
+            'timeout': 20,  # Opcional: aumenta el timeout para evitar "database is locked"
+        }
+    }
+}
 
 AUTH_USER_MODEL = "avisos.User"
 LOGIN_REDIRECT_URL = "home"
