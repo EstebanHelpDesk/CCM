@@ -88,13 +88,37 @@ class NotifyLateView(LoginRequiredMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
+
+    def form_valid(self, form):
+        from .models import LateArrival
+        students = form.cleaned_data["students"]
+        reason = form.cleaned_data["reason"].strip()
+
+        created = 0
+        for student in students:
+            LateArrival.objects.create(
+                responsible=self.request.user,
+                student=student,
+                reason=reason,
+            )
+            created += 1
+
+        if created:
+            messages.success(self.request, f"Se registraron {created} aviso(s).")
+        else:
+            messages.info(self.request, "No se registró ningún aviso.")
+
+        return redirect(self.get_success_url())
     
 class NotificationsListView(LoginRequiredMixin, ListView):
     model = LateArrival
     template_name = "avisos/notifications_list.html"
     context_object_name = "notifications"
+
     def get_queryset(self):
-        return LateArrival.objects.filter(responsible=self.request.user)
+        return (LateArrival.objects
+                .filter(responsible=self.request.user)
+                .order_by("-reported_at"))
 
 
 class StudentsListView(LoginRequiredMixin, ListView):
@@ -165,7 +189,7 @@ class SchoolTodayLatesView(LoginRequiredMixin, SchoolOnlyMixin, ListView):
         qs_hoy_pend = LateArrival.objects.filter(
             reported_at__date=today,
             reviewed_at__isnull=True
-        )
+        ).exclude(responsible=request.user) # no revisar los propios avisos
         if qs_hoy_pend.exists():
             qs_hoy_pend.update(
                 reviewed_by_id=request.user.id,
