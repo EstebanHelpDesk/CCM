@@ -24,11 +24,11 @@
         <div class="mt-2 small">{{ n.reason }}</div>
        <div class="mt-2 d-flex gap-2">
   {% if n.last30_count > 10 %}
-    <span class="badge text-bg-danger">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-danger">{{ n.last30_count }}</span>
   {% elif n.last30_count > 5 %}
-    <span class="badge text-bg-warning text-dark">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-warning text-dark"> {{ n.last30_count }}</span>
   {% else %}
-    <span class="badge text-bg-success">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-success"> {{ n.last30_count }}</span>
   {% endif %}
   <span class="badge text-bg-primary">Total: {{ n.total_count }}</span>
 </div>
@@ -71,11 +71,11 @@
         <td class="text-truncate" style="max-width: 400px">{{ n.reason }}</td>
         <td>
           {% if n.last30_count > 10 %}
-    <span class="badge text-bg-danger">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-danger"> {{ n.last30_count }}</span>
   {% elif n.last30_count > 5 %}
-    <span class="badge text-bg-warning text-dark">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-warning text-dark"> {{ n.last30_count }}</span>
   {% else %}
-    <span class="badge text-bg-success">30 días: {{ n.last30_count }}</span>
+    <span class="badge text-bg-success"> {{ n.last30_count }}</span>
   {% endif %}
   
         </td>
